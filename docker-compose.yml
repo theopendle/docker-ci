@@ -1,10 +1,9 @@
 version: '3.7'
 
 volumes:
-  jenkins_home:
-  gitlab_config:
-  gitlab_logs:
-  gitlab_data:
+  jenkins-home:
+  sonarqube-data:
+  sonarqube-extensions:
 
 networks:
   docker-ci-network:
@@ -25,12 +24,13 @@ services:
       - docker-ci-network
 
   sonarqube:
-    build:
-      context: .
-      dockerfile: dockerfile-sonarqube
+    build: sonarqube:latest
     image: theopendle/sonarqube-ci:1.0.0
     container_name: ${COMPOSE_PROJECT_NAME}-sonarqube
     ports:
       - ${SONAR_PORT_MAPPING}
     networks:
       - docker-ci-network
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
