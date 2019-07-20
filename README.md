@@ -33,12 +33,6 @@ docker exec -i -t $(sudo docker ps | grep "docker-ci-jenkins" | cut -d " " -f 1)
 
 If many of the recommended plugins fail to load during the first install, it may just be because of a slow or unavailble download mirror. Try again after some time.
 
-Setup:
-
-```bash
-apt-get update
-apt-get install maven
-```
 
 ## SonarQube
 
