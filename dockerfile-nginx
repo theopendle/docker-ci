@@ -1,0 +1,11 @@
+FROM nginx:latest
+
+# Install basic tooling
+RUN apt-get update
+RUN apt-get install nano -y
+RUN apt-get install iputils-ping -y
+RUN apt-get install telnet -y
+RUN apt-get install curl -y
+
+RUN mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.disabled
+COPY nginx.conf /etc/nginx/conf.d/docker-ci.conf
