@@ -14,30 +14,27 @@ docker-compose --file docker-compose.yml down
 Then run:
 
 ```bash
-docker-compose --file docker-compose.yml up
+docker-compose --file docker-compose.yml up -d
 ```
 
-## Jenkins
+## Accessing the containers
+This project includes a Bash script to simplify the `docker exec` syntax for connecting to containers as the root user.
 
-To see the Jenkins logs:
-
+Here are some useful examples:
 ```bash
-docker logs $(sudo docker ps | grep "docker-ci-jenkins" | cut -d " " -f 1) --tail 200 -f
+# Run Bash commands in the Jenkins container
+./dexec.sh docker-ci-jenkins bash
+
+# Run Bash commands in the SonarQube container
+./dexec.sh docker-ci-sonarqube bash
+
+# Run Bash commands in the Nginx container
+./dexec.sh docker-ci-nginx bash
 ```
 
-To run bash commands in the Jenkins container:
 
+## Changing the Nginx configuration
+To sync the config project config file from your project to the container (copy file to container and reload config):
 ```bash
-docker exec -i -t $(sudo docker ps | grep "docker-ci-jenkins" | cut -d " " -f 1) /bin/bash
-```
-
-If many of the recommended plugins fail to load during the first install, it may just be because of a slow or unavailble download mirror. Try again after some time.
-
-
-## SonarQube
-
-To run bash commands in the SonarQube container:
-
-```bash
-docker exec -i -t $(sudo docker ps | grep "docker-ci-sonarqube" | cut -d " " -f 1) /bin/bash
+docker cp nginx.conf docker-ci:/etc/nginx/conf.d/docker-ci.conf && ./dexec.sh docker-ci "nginx -s reload"
 ```
